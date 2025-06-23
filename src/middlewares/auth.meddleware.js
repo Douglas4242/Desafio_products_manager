@@ -16,24 +16,28 @@ export function authMiddelware(req, res, next) {
 
     const [schema, token] = partsToken
     
+    
     if (!/^Bearer$/i.test(schema)) {
         return res.status(401).send({message: "Malinformed Token"})
     }
-
+    
     jwt.verify(token, process.env.SECRET_JWT, async (err, decoded) => {
         if (err) {
             return res.status(401).send({message: "Invalid Token"})
         }
-        
-        const user = await userService.findUserByIdService(decoded.id)
+        try { 
+            const user = await userService.findUserByIdService(decoded.id)
 
+            if (!user || !user.id) {
+                return res.status(401).send({message: "Invalid Token"})
+            }
 
-        if (!user || !user.id) {
-            return res.status(401).send({message: "Invalid Token"})
+            req.userId = user.id
+            next()
+        } catch (err) {
+            return res.status(400).send({message: "Invalid token"})
+
         }
-
-        req.userId = user.id
-        next()
     })
 
 
