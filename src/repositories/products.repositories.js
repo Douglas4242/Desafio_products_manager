@@ -124,6 +124,26 @@ function updateProductRepository (id, newProduct) {
 }
 
 
+function deleteProductRepository (id, product) {
+    return new Promise ((resolve, reject) => {
+
+        const {name, description, category, price} = product
+
+
+        db.run(`
+            DELETE FROM products
+            WHERE id = ?
+            `, [id],
+            (err) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve({ message: `product: ${name}, ${description},id: ${id}, was successfully deleted` })
+                }
+            })
+    })
+}
+
 
 
 export default {
@@ -132,5 +152,6 @@ export default {
     findProductByCategoryRepository,
     findProductByIdRepository,
     findAllProductsRepository,
-    updateProductRepository
+    updateProductRepository,
+    deleteProductRepository
 }

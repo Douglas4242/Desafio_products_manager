@@ -42,9 +42,27 @@ async function updateProductService(id, newProduct) {
     
 }
 
+async function deleteProductService(id) {
+
+    const product = await productsRepositories.findProductByIdRepository(id)
+
+    
+    
+    if (!product) throw new Error ("Product does not exists")
+        
+        
+        const {message} = await productsRepositories.deleteProductRepository(id, product)
+        
+        console.log(message)
+
+    return message
+    
+}
+
 export default {
     createProductService,
     findAllProductsService,
     findProductByIdService,
-    updateProductService
+    updateProductService,
+    deleteProductService
 }

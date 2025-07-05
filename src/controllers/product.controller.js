@@ -36,8 +36,22 @@ async function updatedProductController(req, res) {
     
 }
 
+async function deleteProductController(req, res) {
+    const {id} = req.params
+
+    try {
+        const message = await productService.deleteProductService(id)
+        res.status(200).send(message)
+    } catch (err) {
+        res.status(400).send()
+    }
+
+    
+}
+
 export default {
     createProductController,
     findAllProductsController,
-    updatedProductController
+    updatedProductController,
+    deleteProductController
 }
