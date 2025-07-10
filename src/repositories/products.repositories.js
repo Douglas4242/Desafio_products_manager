@@ -45,23 +45,6 @@ function findProductByNameRepository (name) {
     })
 }
 
-function findProductByCategoryRepository (category) {
-    return new Promise ((resolve, reject) => {
-        db.get(`
-            SELECT id, name, description, category, price FROM products
-            WHERE category = ?
-            `,[category],
-            (err, row) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve(row)
-                }
-            })
-    })
-}
-
-
 function findProductByIdRepository (id) {
     return new Promise ((resolve, reject) => {
         db.get(`
@@ -144,14 +127,48 @@ function deleteProductRepository (id, product) {
     })
 }
 
+function findProductByCategoryRepository (category) {
+    return new Promise ((resolve, reject) => {
+        db.all(`
+            SELECT * FROM products
+            WHERE category = ?
+            `, [category],
+            (err, rows) => {    
+                if (err) {
+                    reject(err)
+                }else {
+                    resolve(rows)
+                }
+            })
+    })
+}
+
+function searchProductByNameRepository (name) {
+    return new Promise ((resolve, reject) => {
+
+        db.all(`
+            SELECT * FROM products
+            WHERE name LIKE ?
+            `, [`%${name}%`], 
+            (err, rows) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(rows)
+                }
+            })
+    })
+}
+
 
 
 export default {
     createProductRepository,
     findProductByNameRepository,
-    findProductByCategoryRepository,
     findProductByIdRepository,
     findAllProductsRepository,
     updateProductRepository,
-    deleteProductRepository
+    deleteProductRepository,
+    findProductByCategoryRepository,
+    searchProductByNameRepository
 }

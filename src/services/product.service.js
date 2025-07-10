@@ -59,10 +59,28 @@ async function deleteProductService(id) {
     
 }
 
+async function findBookByCategoryService(category) {
+    const products = await productsRepositories.findProductByCategoryRepository(category)
+
+
+    return products
+    
+}
+
+async function searchProductByNameService(name) {
+    const products = await productsRepositories.searchProductByNameRepository(name)
+    
+
+    return products
+    
+}
+
 export default {
     createProductService,
     findAllProductsService,
     findProductByIdService,
     updateProductService,
-    deleteProductService
+    deleteProductService,
+    findBookByCategoryService,
+    searchProductByNameService
 }
